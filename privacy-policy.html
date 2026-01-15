@@ -75,6 +75,41 @@
             border-radius: 8px;
         }
 
+        /* Hamburger Menu Button */
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            width: 24px;
+            height: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .nav-hamburger span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background: var(--color-text);
+            border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .nav-hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .nav-hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
         .nav-links {
             display: flex;
             gap: 32px;
@@ -172,8 +207,39 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
+            .nav-hamburger {
+                display: flex;
+            }
+
+            ul.nav-links {
                 display: none;
+                position: fixed;
+                top: 61px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: calc(100vh - 61px);
+                flex-direction: column;
+                background: white;
+                padding: 32px 24px;
+                gap: 0;
+                z-index: 9999;
+            }
+
+            ul.nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links a {
+                display: block;
+                padding: 16px 0;
+                font-size: 17px;
+                font-weight: 500;
             }
 
             main {
@@ -208,11 +274,16 @@
                 <img src="img/logo.png" alt="Compleat logo">
                 Compleat
             </a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html#features">Features</a></li>
                 <li><a href="index.html#download">Download</a></li>
                 <li><a href="privacy-policy.html">Privacy</a></li>
             </ul>
+            <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
@@ -274,5 +345,22 @@
             <p class="copyright">&copy; 2026 Compleat. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        const hamburger = document.getElementById('nav-hamburger');
+        const navLinks = document.getElementById('nav-links');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>
