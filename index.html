@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compleat - Track Your Munro-Bagging Progress</title>
+    <meta name="description" content="A simple, modern iOS app to track your Munro-bagging progress. Record ascents, view maps, and track your journey across Scotland's 282 Munros.">
+    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="icon" type="image/png" href="img/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-text: #1d1d1f;
+            --color-text-secondary: #86868b;
+            --color-background: #ffffff;
+            --color-background-alt: #f5f5f7;
+            --color-accent: #007AFF;
+            --color-accent-hover: #0056b3;
+            --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --max-width: 980px;
+            --section-spacing: 120px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            color: var(--color-text);
+            background: var(--color-background);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        nav .nav-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .nav-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-text);
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 24px 100px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--color-background-alt) 0%, var(--color-background) 100%);
+        }
+
+        .hero-content {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 27px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .hero .tagline {
+            font-size: 24px;
+            color: var(--color-text-secondary);
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-text);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 500;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .hero-cta:hover {
+            transform: scale(1.02);
+            background: #333;
+        }
+
+        .hero-cta svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .hero-device {
+            margin-top: 60px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* iPhone Mockup */
+        .iphone-mockup {
+            position: relative;
+            width: 280px;
+            height: 570px;
+            background: #1d1d1f;
+            border-radius: 50px;
+            padding: 12px;
+            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.25), 0 30px 60px -30px rgba(0, 0, 0, 0.3);
+        }
+
+        .iphone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 28px;
+            background: #1d1d1f;
+            border-radius: 20px;
+            z-index: 10;
+        }
+
+        .iphone-mockup img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            border-radius: 40px;
+        }
+
+        /* Feature Sections */
+        .features {
+            padding: 0 24px;
+        }
+
+        .feature {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: var(--section-spacing) 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .feature:nth-child(even) {
+            direction: rtl;
+        }
+
+        .feature:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .feature-content {
+            max-width: 440px;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--color-background-alt);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon svg {
+            width: 24px;
+            height: 24px;
+            color: var(--color-accent);
+        }
+
+        .feature h2 {
+            font-size: 40px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+
+        .feature p {
+            font-size: 18px;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .feature-device {
+            display: flex;
+            justify-content: center;
+        }
+
+        .feature .iphone-mockup {
+            width: 240px;
+            height: 490px;
+            border-radius: 44px;
+            padding: 10px;
+        }
+
+        .feature .iphone-mockup::before {
+            width: 85px;
+            height: 24px;
+            top: 10px;
+        }
+
+        .feature .iphone-mockup img {
+            border-radius: 36px;
+        }
+
+        /* Divider */
+        .divider {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: var(--section-spacing) 24px;
+            text-align: center;
+            background: var(--color-background-alt);
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            color: var(--color-text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .app-store-badge {
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .app-store-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .app-store-badge img {
+            height: 54px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 24px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-text);
+        }
+
+        .copyright {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            :root {
+                --section-spacing: 80px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 120px 20px 60px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero .tagline {
+                font-size: 18px;
+            }
+
+            .hero-logo {
+                width: 100px;
+                height: 100px;
+                border-radius: 22px;
+            }
+
+            .hero-device .iphone-mockup {
+                width: 220px;
+                height: 450px;
+                border-radius: 40px;
+            }
+
+            .hero-device .iphone-mockup::before {
+                width: 80px;
+                height: 22px;
+            }
+
+            .hero-device .iphone-mockup img {
+                border-radius: 32px;
+            }
+
+            .feature {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .feature:nth-child(even) {
+                direction: ltr;
+            }
+
+            .feature-content {
+                max-width: 100%;
+            }
+
+            .feature-icon {
+                margin: 0 auto 20px;
+            }
+
+            .feature h2 {
+                font-size: 32px;
+            }
+
+            .feature p {
+                font-size: 16px;
+            }
+
+            .cta-section h2 {
+                font-size: 32px;
+            }
+
+            .cta-section p {
+                font-size: 17px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="nav-logo">
+                <img src="img/logo.png" alt="Compleat logo">
+                Compleat
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#download">Download</a></li>
+                <li><a href="privacy-policy.html">Privacy</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <img class="hero-logo" src="img/logo.png" alt="Compleat app icon">
+            <h1>Compleat</h1>
+            <p class="tagline">A simple, modern iOS app to track your Munro-bagging progress</p>
+            <a href="#download" class="hero-cta">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                Download on the App Store
+            </a>
+        </div>
+        <div class="hero-device">
+            <div class="iphone-mockup">
+                <img src="img/home.png" alt="Compleat app home screen">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+
+        <!-- Progress Tracking -->
+        <div class="feature">
+            <div class="feature-content">
+                <h2>Track Your Progress</h2>
+                <p>Record every ascent with dates and personal notes. Watch your completion percentage grow and see detailed statistics including total elevation climbed across all 282 Munros.</p>
+            </div>
+            <div class="feature-device">
+                <div class="iphone-mockup">
+                    <img src="img/progress.png" alt="Progress tracking screen">
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Interactive Map -->
+        <div class="feature">
+            <div class="feature-content">
+                <h2>Interactive Map</h2>
+                <p>Browse all Munros on a beautiful map with colour-coded pins. Blue marks your conquered peaks, red shows the ones still waiting. Filter to see only climbed or remaining summits.</p>
+            </div>
+            <div class="feature-device">
+                <div class="iphone-mockup">
+                    <img src="img/map.png" alt="Interactive map screen">
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Regional Breakdown -->
+        <div class="feature">
+            <div class="feature-content">
+                <h2>Regional Breakdown</h2>
+                <p>Explore Scotland's mountain regions with dedicated views for each area. Track your progress region by region with visual progress indicators and plan your next adventure.</p>
+            </div>
+            <div class="feature-device">
+                <div class="iphone-mockup">
+                    <img src="img/regions.png" alt="Regional breakdown screen">
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Smart List View -->
+        <div class="feature">
+            <div class="feature-content">
+                <h2>Smart List View</h2>
+                <p>Search, sort, and filter all 282 Munros by name, height, region, or number of ascents. Bulk-add multiple peaks for those glorious multi-summit days on the hills.</p>
+            </div>
+            <div class="feature-device">
+                <div class="iphone-mockup">
+                    <img src="img/list.png" alt="List view screen">
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="download">
+        <div class="cta-content">
+            <h2>Start Your Journey</h2>
+            <p>Download Compleat and begin tracking your Munro-bagging adventure today.</p>
+            <a href="#" class="app-store-badge">
+                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store">
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">&copy; 2026 Compleat. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

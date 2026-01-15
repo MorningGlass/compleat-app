@@ -4,60 +4,275 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - Compleat</title>
+    <meta name="description" content="Privacy Policy for Compleat, the Munro-bagging tracker app for iOS.">
+    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="icon" type="image/png" href="img/logo.png">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-text: #1d1d1f;
+            --color-text-secondary: #86868b;
+            --color-background: #ffffff;
+            --color-background-alt: #f5f5f7;
+            --color-accent: #007AFF;
+            --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            --max-width: 680px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: var(--font-stack);
+            color: var(--color-text);
+            background: var(--color-background);
             line-height: 1.6;
-            max-width: 800px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        nav .nav-content {
+            max-width: 980px;
             margin: 0 auto;
-            padding: 20px;
-            color: #333;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        h1 {
-            color: #1a1a1a;
-            border-bottom: 2px solid #007AFF;
-            padding-bottom: 10px;
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 600;
+            font-size: 18px;
         }
-        h2 {
-            color: #1a1a1a;
-            margin-top: 30px;
+
+        .nav-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
         }
-        p {
-            margin-bottom: 16px;
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
         }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--color-text);
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        /* Main Content */
+        main {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 120px 24px 80px;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+        }
+
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+
         .last-updated {
-            color: #666;
-            font-size: 0.9em;
-            margin-bottom: 30px;
+            font-size: 15px;
+            color: var(--color-text-secondary);
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 40px;
+        }
+
+        .content-section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            margin-bottom: 12px;
+        }
+
+        .content-section p {
+            font-size: 17px;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 24px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-content {
+            max-width: 980px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--color-text);
+        }
+
+        .copyright {
+            color: var(--color-text-secondary);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            main {
+                padding: 100px 20px 60px;
+            }
+
+            .page-header h1 {
+                font-size: 32px;
+            }
+
+            .content-section h2 {
+                font-size: 20px;
+            }
+
+            .content-section p {
+                font-size: 16px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Privacy Policy</h1>
-    <p class="last-updated">Last updated: January 15, 2026</p>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">
+                <img src="img/logo.png" alt="Compleat logo">
+                Compleat
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#download">Download</a></li>
+                <li><a href="privacy-policy.html">Privacy</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <h2>Overview</h2>
-    <p>Compleat ("the App") is designed with your privacy in mind. This policy explains how we handle your information.</p>
+    <!-- Main Content -->
+    <main>
+        <header class="page-header">
+            <h1>Privacy Policy</h1>
+            <p class="last-updated">Last updated: January 15, 2026</p>
+        </header>
 
-    <h2>Data Collection</h2>
-    <p>The App stores your Munro completion data locally on your device. We do not collect, transmit, or store any personal information on external servers.</p>
+        <section class="content-section">
+            <h2>Overview</h2>
+            <p>Compleat ("the App") is designed with your privacy in mind. This policy explains how we handle your information.</p>
+        </section>
 
-    <h2>Data Storage</h2>
-    <p>All data you enter into the App, including your progress and preferences, is stored locally on your device. If you use iCloud sync, your data is stored in your personal iCloud account and is subject to Apple's privacy policy.</p>
+        <section class="content-section">
+            <h2>Data Collection</h2>
+            <p>The App stores your Munro completion data locally on your device. We do not collect, transmit, or store any personal information on external servers.</p>
+        </section>
 
-    <h2>Third-Party Services</h2>
-    <p>The App does not integrate with third-party analytics, advertising, or tracking services.</p>
+        <section class="content-section">
+            <h2>Data Storage</h2>
+            <p>All data you enter into the App, including your progress and preferences, is stored locally on your device. If you use iCloud sync, your data is stored in your personal iCloud account and is subject to Apple's privacy policy.</p>
+        </section>
 
-    <h2>Data Sharing</h2>
-    <p>We do not sell, trade, or otherwise transfer your information to third parties.</p>
+        <section class="content-section">
+            <h2>Third-Party Services</h2>
+            <p>The App does not integrate with third-party analytics, advertising, or tracking services.</p>
+        </section>
 
-    <h2>Children's Privacy</h2>
-    <p>The App does not knowingly collect any personal information from children.</p>
+        <section class="content-section">
+            <h2>Data Sharing</h2>
+            <p>We do not sell, trade, or otherwise transfer your information to third parties.</p>
+        </section>
 
-    <h2>Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated revision date.</p>
+        <section class="content-section">
+            <h2>Children's Privacy</h2>
+            <p>The App does not knowingly collect any personal information from children.</p>
+        </section>
 
-    <h2>Contact</h2>
-    <p>If you have any questions about this Privacy Policy, please contact us through the App Store.</p>
+        <section class="content-section">
+            <h2>Changes to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated revision date.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Contact</h2>
+            <p>If you have any questions about this Privacy Policy, please contact us through the App Store.</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">&copy; 2026 Compleat. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
